@@ -136,12 +136,12 @@ done:
 }
 
 static void interrupt (*oldfunc)(unsigned bp, unsigned di, unsigned si,
-			         unsigned ds, unsigned es, unsigned dx,	
+			         unsigned ds, unsigned es, unsigned dx,
 			         unsigned cx, unsigned bx, unsigned ax);
 
 
 void interrupt  show_regs(unsigned bp, unsigned di, unsigned si,
-			  unsigned ds, unsigned es, unsigned dx,	
+			  unsigned ds, unsigned es, unsigned dx,
 			  unsigned cx, unsigned bx, unsigned ax)
 {
 	char		*p;
@@ -166,16 +166,16 @@ void interrupt  show_regs(unsigned bp, unsigned di, unsigned si,
 		}
 		switch(ax & 0xff) {
 		/*
- 		 *  MSCSUB sub command switches for altering the context.
+		 *  MSCSUB sub command switches for altering the context.
 		 *
 	 	 *    bx sub-command:
 		 *	00,  Install drive in cx, eg cx=0, Drive A,
 		 *				     cx=1, Drive B, etc
- 		 *	01,  Remove drive in cx,  eg cx=0, Drive A, etc
+		 *	01,  Remove drive in cx,  eg cx=0, Drive A, etc
 		 *	02,  Set mscdex version number, eg cx = 0x020a => 2.10
 		 *	03,  Turn off this mscsub, pass over to normal handler
 		 *	04,  Turn on mscsub.
- 		 *	05,  Change name of device driver (eg MSCD000)
+		 *	05,  Change name of device driver (eg MSCD000)
 	 	 *		name in ES:BX, name is 8 chars (including '\0')
 		 *	06,  Change name of file that contains data for
 		 *	     sub-functions 02h, 03h, 04h for each drive.
@@ -213,7 +213,7 @@ void interrupt  show_regs(unsigned bp, unsigned di, unsigned si,
 		case 0x00:
 			cx = 0xffff;
 			for (i=0,bx = 0, sh=drive_map;  sh; sh >>= 1,i++) {
-				if (sh & 0x01) {	
+				if (sh & 0x01) {
 					bx++;
 					if (cx == 0xffff) {
 						cx = i;
@@ -225,7 +225,7 @@ void interrupt  show_regs(unsigned bp, unsigned di, unsigned si,
 			dll = (struct DLL *)((((long) es) << 16) + bx);
 
 			for (i=0,j = 0, sh=drive_map;  sh; sh >>= 1,i++) {
-				if (sh & 0x01) {	
+				if (sh & 0x01) {
 					dll[j].subunit = j;
 					dll[j].devhead = (struct DHD *)&devhead;
 					j++;
@@ -281,7 +281,7 @@ void interrupt  show_regs(unsigned bp, unsigned di, unsigned si,
 		case 0x08:
 			ax = 0x0021;	/* Error_Not_Ready */
 			asm {
-				stc	
+				stc
 			}
 			break;
 		/*
@@ -289,9 +289,9 @@ void interrupt  show_regs(unsigned bp, unsigned di, unsigned si,
 		 *  0x0a: Reserved, so ingnore..
 		 */
 		case 0x09:
-		case 0x0a:	
+		case 0x0a:
 			break;
-		/*	
+		/*
 		 *  CD-ROM Drive Check, drive = cx
 		 */
 		case 0x0b:
@@ -313,7 +313,7 @@ void interrupt  show_regs(unsigned bp, unsigned di, unsigned si,
 		/*
 		 *  Get CD ROM Drive Letters, ES:BX = buffer
 		 */
-		case 0x0d: 		
+		case 0x0d:
 			p = (char *)((((long) es) << 16) + bx); // o/p buffer ptr
 			for (i = 0, sh=drive_map;  sh; sh >>= 1,i++) {
 				if (sh & 0x01) {
@@ -372,8 +372,8 @@ main(int argc, char** argv)
 
 
 	/*
-        * Scan & parse drive list
- 	 */
+	 * Scan & parse drive list
+	 */
 	fprintf(stdout,"MSCDEX Substitute, by cik@ukc.ac.uk, V0.1, ");
 	if (argc < 2) {
 		fprintf(stdout,"\nUsage: MSCSUB drive ...\n");
